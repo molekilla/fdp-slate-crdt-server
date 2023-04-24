@@ -46,7 +46,8 @@
     "keccak256": "^1.0.6",
     "multiformats": "^9.8.1",
     "rxjs": "^7.8.0",
-    "slate": "^0.94.0"
+    "slate": "^0.94.0",
+    "y-fdp-storage": "^0.2.9"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
