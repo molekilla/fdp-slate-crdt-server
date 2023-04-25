@@ -90,7 +90,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // Websocket endpoint
-app.ws("/collaboration/:topic", (websocket, request) => {
+app.ws("/topic/:topic", (websocket, request) => {
   const context = {};
 
   const server = createWsServer(createYStorageProvider(request));
