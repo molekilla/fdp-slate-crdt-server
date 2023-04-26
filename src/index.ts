@@ -38,7 +38,7 @@ const createYStorageProvider = (
 ) => {
   // @ts-ignore - Yjs types are not up to date
   const wallet = makePrivateKeySigner(Utils.hexToBytes(secretKey));
-  const topic = req.body.documentName;
+  const topic = req.params.topic;
 
   // Create FdpStoragePersistence object
   const persistence = new FdpStoragePersistence(
@@ -56,17 +56,24 @@ const createWsServer = (storeProvider: FdpStoragePersistence) => {
   const server = Server.configure({
     extensions: [
       new Logger(),
-      new Database({
-        fetch: async ({ documentName }) => {
-          return storeProvider.getYDoc();
-        },
-        store: async ({ documentName, state }) => {
-          await storeProvider.storageWrite(state);
-        },
-      }),
+      // new Database({
+      //   fetch: async ({ documentName }) => {
+      //     try {
+      //       const doc = await storeProvider.getYDoc();
+      //       return doc;
+      //     } catch (e) {
+      //       return new Doc();
+      //     }
+      //   },
+      //   store: async (arg) => {
+      //     const update = encodeStateAsUpdate(arg.document);
+      //     await storeProvider.storeUpdate(update);
+      //   },
+      // }),
     ],
 
     async onLoadDocument(data) {
+
       // Load the initial value in case the document is empty
       if (data.document.isEmpty("content")) {
         const insertDelta = slateNodesToInsertDelta(initialValue);
@@ -75,7 +82,6 @@ const createWsServer = (storeProvider: FdpStoragePersistence) => {
         // @ts-ignore - Yjs types are not up to date
         sharedRoot.applyDelta(insertDelta);
       }
-
       return data.document;
     },
   });
@@ -92,7 +98,6 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 // Websocket endpoint
 app.ws("/topic/:topic", (websocket, request) => {
   const context = {};
-
   const server = createWsServer(createYStorageProvider(request));
   server.handleConnection(websocket, request, context);
 });
