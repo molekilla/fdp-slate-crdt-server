@@ -56,24 +56,18 @@ const createWsServer = (storeProvider: FdpStoragePersistence) => {
   const server = Server.configure({
     extensions: [
       new Logger(),
-      // new Database({
-      //   fetch: async ({ documentName }) => {
-      //     try {
-      //       const doc = await storeProvider.getYDoc();
-      //       return doc;
-      //     } catch (e) {
-      //       return new Doc();
-      //     }
-      //   },
-      //   store: async (arg) => {
-      //     const update = encodeStateAsUpdate(arg.document);
-      //     await storeProvider.storeUpdate(update);
-      //   },
-      // }),
+      new Database({
+        fetch: async ({ documentName }) => {
+          return storeProvider.read();
+        },
+        store: async (arg) => {
+          const update = encodeStateAsUpdate(arg.document);
+          await storeProvider.store(update);
+        },
+      }),
     ],
 
     async onLoadDocument(data) {
-
       // Load the initial value in case the document is empty
       if (data.document.isEmpty("content")) {
         const insertDelta = slateNodesToInsertDelta(initialValue);

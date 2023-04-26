@@ -62,7 +62,7 @@
     "multiformats": "^9.8.1",
     "rxjs": "^7.8.0",
     "slate": "^0.94.0",
-    "y-fdp-storage": "^0.2.10"
+    "y-fdp-storage": "^0.2.12"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
