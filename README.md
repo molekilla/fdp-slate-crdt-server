@@ -34,6 +34,14 @@ Server port
 
 ## Usage
 
+Start Yjs CRDT server and in a separate terminal start `fdp-slate` client (using `crdt-slate` branch). Be sure to configure the websocket url to include topic.
+
+> ws://localhost:9028/topic/crdt-document
+
+## How it works
+
+The server looks up any existing data stored in the feed using the topic. If no data is found, the document is initialized with a default value and a Y Shared Type is used to sync between client and server.
+
 ## Maintainer
 
 @molekilla
