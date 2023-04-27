@@ -6,7 +6,6 @@ import { encodeStateAsUpdate, Doc, XmlText } from "yjs";
 
 import { makePrivateKeySigner, FdpStoragePersistence } from "y-fdp-storage";
 import { Bee, Utils } from "@ethersphere/bee-js";
-import { Webhook, Events } from "@hocuspocus/extension-webhook";
 
 import express from "express";
 import expressWebsockets from "express-ws";
