@@ -2,11 +2,9 @@ require("dotenv").config();
 import { Logger } from "@hocuspocus/extension-logger";
 import { Server } from "@hocuspocus/server";
 import { slateNodesToInsertDelta } from "@slate-yjs/core";
-import { encodeStateAsUpdate, Doc, XmlText } from "yjs";
-
+import { encodeStateAsUpdate, XmlText } from "yjs";
 import { makePrivateKeySigner, FdpStoragePersistence } from "y-fdp-storage";
 import { Bee, Utils } from "@ethersphere/bee-js";
-
 import express from "express";
 import expressWebsockets from "express-ws";
 import bodyParser from "body-parser";
@@ -19,7 +17,6 @@ const postageBatchId = process.env.BEE_POSTAGE;
 const secretKey = process.env.BEE_SECRET_KEY;
 
 // Bee client
-// @ts-ignore - Bee types are not up to date
 const bee = new Bee(process.env.BEE_URL);
 
 // Initial value
@@ -35,7 +32,6 @@ const createYStorageProvider = (
     Record<string, any>
   >
 ) => {
-  // @ts-ignore - Yjs types are not up to date
   const wallet = makePrivateKeySigner(Utils.hexToBytes(secretKey));
   const topic = req.params.topic;
 
@@ -85,8 +81,8 @@ const createWsServer = (storeProvider: FdpStoragePersistence) => {
 };
 
 const { app } = expressWebsockets(express());
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Websocket endpoint
 app.ws("/topic/:topic", (websocket, request) => {
